@@ -1,0 +1,61 @@
+#!/bin/bash
+
+create_image_and_config() {
+  local name="$1"
+  local cyls="$2"
+  local heads="$3"
+  local secs="$4"
+  local rate="$5"
+  local rpm="$6"
+  
+  local size_kb=$((cyls * secs))
+  local size_b=$((size_kb * 1024))
+
+  echo Creating a disk image with config:
+  echo $cyls cylinders, $heads heads, $secs sectors
+  echo $rate kbit/sec, $rpm rpm
+  echo $size_kb kbyte, $size_b bytes
+  echo
+  
+  if [[ $cyls -ne 80 || $heads -ne 2 || $secs -ne 9 ]]
+  then
+    echo [::${size_b}] >> IMG.CFG
+    echo cyls = $cyls >> IMG.CFG
+    echo heads = $heads >> IMG.CFG
+    echo secs = $secs >> IMG.CFG
+    echo bps = 512 >> IMG.CFG
+    echo rate = $rate >> IMG.CFG
+    echo rpm = $rpm >> IMG.CFG
+    echo >> IMG.CFG
+  fi
+  
+  mformat -C -t $cyls -h 2 -s $secs -i images/formatted_$(printf '%05d' "${size_kb}")_${name}.img ::
+}
+
+# remove IMG.CFG
+rm -f IMG.CFG
+
+# empty the "formatted" folder if not empty
+[ "$(ls -A images/)" ] && rm images/*
+
+# generate the disk images
+
+# standard disk formats:
+#                       name cyls heads secs rate rpm 
+create_image_and_config dd   80   2     9    250  300
+create_image_and_config dd   80   2     10   250  300
+create_image_and_config dd   82   2     10   250  300
+create_image_and_config hd   80   2     18   250  150
+create_image_and_config ed   80   2     36   250  75
+
+# custom disk formats:
+#                       name cyls heads secs rate rpm 
+create_image_and_config xl   255  2     9    250  300
+create_image_and_config xl   255  2     12   250  225
+create_image_and_config xl   255  2     18   250  150
+create_image_and_config xl   255  2     27   250  100
+create_image_and_config xl   255  2     36   250  75
+create_image_and_config xl   255  2     54   250  50
+
+echo done!
+
