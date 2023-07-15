@@ -32,6 +32,7 @@ The specifications of the different types of disks are as follows:
 - DD: 720 kb, 80 cylinders, 9 sectors and 2 sides using a data rate of 250 kbit/s 
 - HD: 1440 kb, 80 cylinders, 18 sectors and 2 sides using a data rate of 500 kbit/s
 - ED: 2880 kb, 80 cylinders, 36 sectors and 2 sides using a data rate of 1000 kbit/s
+
 This means that normal HD and ED floppy drives have 2 and 4 times the speed of a DD drive.
 
 A stock Atari ST can only access floppy disks using a 250 kbit/s data rate. To access regular HD floppies, you need a floppy controller that supports 500 kbit/s, which is only available on the Mega STE / TT / Falcon. It is possible to modify other STs to add HD support, but that involves soldering and possibly even swapping out the floppy disk controller.
